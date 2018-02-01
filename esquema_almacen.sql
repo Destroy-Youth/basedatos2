@@ -14,10 +14,12 @@ create or replace procedure guardar_almacen( --Argumento solo si se requiere
     end;
   /
 
---usaremos un bloque PL-SQL para probar que est· bien nuestro procedimiento
+--usaremos un bloque PL-SQL para probar que est√° bien nuestro procedimiento
 begin
   guardar_almacen(12,'Ecaatepecs');
 end;
 /
 
 Select * from almacen;
+
+--probarel procedimiento con netbeans
