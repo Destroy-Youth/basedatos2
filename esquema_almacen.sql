@@ -77,7 +77,7 @@ Pasos para guardar una fila o registro con PK impuesto.
   
   
   Ejemplo:
-*/
+
 create table calificaciones(
   id_calificacion integer,
   materia varchar2(50),
@@ -98,7 +98,7 @@ Cursores: Sentencias SQL que se puede congelar y operar sobre ella
   -Explicitos: Cuando se usa un select complejo, devolviendo numerosos datos por fila
   -Implicitos: Cuando se hace un select simple, que solo devuelve un solo valor
 
-*/
+/*
 
 create or replace procedure guardar_calificaciones(
   my_id_calificacion out integer,
@@ -112,7 +112,7 @@ create or replace procedure guardar_calificaciones(
   end;
 /
   
-  
+  */
   
 
 create or replace procedure guardar_cliente
