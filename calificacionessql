@@ -1,0 +1,98 @@
+--PAso 1: Crear tabla calificaciones
+create table calificaciones(
+  id_calificacion integer,
+  materia varchar2 (50),
+  valor float,
+  constraint pk_id_cali primary key(id_calificacion)
+  );
+
+--Paso 2: GENERAR SECUENCIA
+create sequence sec_calificaciones
+  start with 1
+  increment by 1
+  nomaxvalue;
+  
+--Aquí ya viene el procedimiento almacenado
+/*
+Cursores: Sentencias SQL que se puede congelar y operar sobre ella
+
+  -Explicitos: Cuando se usa un select complejo, devolviendo numerosos datos por fila
+  -Implicitos: Cuando se hace un select simple, que solo devuelve un solo valor
+
+*/
+
+create or replace procedure guardar_calificaciones(
+  my_id_calificacion out integer,
+  my_materia in varchar2,
+  my_valor in float  
+  )
+  as
+  begin                                 --into -> cursor implicito,  DUAL = tabla virtual nacido de la secuencia en el cursor
+    select sec_calificaciones.nextval into my_id_calificacion from dual; --nextval indica la poscicion, deposita el resultado en el id, 
+    insert into calificaciones values(my_id_calificacion,my_materia,my_valor);
+  end;
+/
+
+--Probar procedimiento con un BLoque PL SQL
+declare
+  valor integer;
+  begin
+    guardar_calificaciones(valor,'BDs 2',8);
+  end;
+/
+
+select * from calificaciones;   --Relacionado a cursor explicito
+select count(*) from calificaciones; --Relacionado a cursor implicito
+
+--drop table calificaciones
+--Ejercicoo: Introducir las calificaciones que se esperan obtener
+declare
+  valor integer;
+    begin
+      guardar_calificaciones(valor,'PDS',5.3);
+      guardar_calificaciones(valor,'DM DW',4.5);
+      guardar_calificaciones(valor,'BDs 2',7.5);
+      guardar_calificaciones(valor,'Aplicaciones distribuidas',3.3);
+      guardar_calificaciones(valor,'Sistemas gerenciales',10);
+    end;
+/
+--Cursor
+declare
+  cursor cur_calif is select * from calificaciones; --Siempre sentencia sql
+    begin
+      --Empieza la lógica del cursor
+      for rec in cur_calif loop --rec: variable que almacena la tupla
+      dbms_output.put_line('ejemplo de cursor explicito    ' || rec.valor || '   Materia: ' || rec.materia);
+    end loop;
+  end;
+/
+
+
+--Actualizar las calificaciones a 5 si la calificacion es menor a 5
+--usando un cursor tipo update
+
+declare
+  cursor cur_calif_5 is select * from calificaciones for update; --for update indica que el cursor se usará para cambios
+    begin
+     for rec in cur_calif_5 loop 
+        if rec.valor < 5 then
+          update calificaciones set valor=5 where current of cur_calif_5; --Dondee se encuentre el cursor se modif la tabla
+        end if;
+    end loop;
+  end;
+/
+
+select * from calificaciones;
+
+--Si la calificacion tiene .5, subirla al dígito próximo (redondear)
+--excepto los 5
+
+declare 
+  inte integer;
+  cursor cur_calif_redondeo is select * from calificaciones for update;
+    begin
+      for rec in cur_calif_redondeo loop
+        inte=rec.valor;
+        
+
+  
