@@ -1,0 +1,73 @@
+--Creación de entidades
+create table clienteETE (
+  idCliente integer primary key,
+  nombre varchar(40),
+  aPaterno varchar(40),
+  aMaterno varchar(40),
+  sueldoBase float);
+  
+create table direccionETE(
+  idDireccion integer primary key,
+  idCliente integer,
+  calle varchar(40),
+  numero varchar(6),
+  colonia varchar(40),
+  municipio varchar(30),
+  estado varchar(30),
+  cp char(6));
+  
+  --Relación de tablas
+  
+  alter table direccionETE add constraint FK_ETE_d_c_1 
+    foreign key (idCliente) references clienteETE (idCliente);
+    
+--Procedimientos almacenados
+create sequence seq_cliente
+  start WITH 1
+  increment by 1
+  nomaxvalue;
+  
+create or replace procedure guardar_clienteETE(
+  my_id out integer,
+  my_nombre in varchar,
+  my_aPaterno in varchar,
+  my_aMaterno in varchar,
+  my_sueldoBase in float,
+  
+  my_calle in varchar,
+  my_numero in varchar,
+  my_colonia in varchar,
+  my_municipio in varchar,
+  my_estado in varchar,
+  my_cp in char)
+  as
+  
+  begin
+    select seq_cliente.nextval into my_id from dual;
+    insert into clienteETE values (my_id,my_nombre,my_aPaterno,my_aMaterno,my_sueldoBase);
+    insert into direccionETE values (my_id,my_id,my_calle,my_numero,my_colonia,
+                                      my_municipio,my_estado,my_cp);
+  end;
+/
+
+--Gurdar información
+declare
+  idCD integer;
+begin
+  GUARDAR_CLIENTEETE(idCD,'Juan','Campos','Martinez',80000,
+    'Sur','30','Jalapa','Ecatepec','Estado de Mexico','55130');
+end;
+/
+
+set serveroutput on;
+--Mostrar resultado
+declare 
+  cursor cur_clienteETE is select * from clienteETE cl
+    join direccionETE di on (cl.idCLiente = di.idCliente);
+  
+    begin
+      for rec in cur_clienteETE loop
+      dbms_output.put_line('Nombre: ' || rec.nombre || ' calle: ' || rec.calle);
+      end loop;
+    end;
+  /
