@@ -56,6 +56,8 @@ declare
 begin
   GUARDAR_CLIENTEETE(idCD,'Juan','Campos','Martinez',80000,
     'Sur','30','Jalapa','Ecatepec','Estado de Mexico','55130');
+  guardar_clienteETE(idCD,'Ivan','Herrera','Equihua',4000,
+    'Monte de sauces','50','Joyas','Tultepec','Estado de Mexico','54080');
 end;
 /
 
@@ -71,3 +73,5 @@ declare
       end loop;
     end;
   /
+  
+  --sys_refcursor para mostrar selects de manera externa
