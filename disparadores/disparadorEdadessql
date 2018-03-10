@@ -1,0 +1,57 @@
+/*
+  lógica del disparador
+  -Todos los registros insertados se guardarán en la tabla base
+  -menores de edad deben guardarse en mennores
+  -mayores de edad deben guardarse en mayoers
+  
+  Nota: La única tabla que tiene permitido hacer expliciamente el insert es la tabla base
+
+*/
+
+--Primero se necesita automatizar el id con una secuencia y un procedimiento almacenado
+create sequence sec_idbase
+  start with 1
+  increment by 1
+  nomaxvalue;
+  
+--Declarar procedimiento almacenado para guardar en base
+create or replace procedure guardar_base(
+  my_id_base out integer,
+  my_edad in integer)
+  as
+
+  begin
+    select sec_idbase.nextval into my_id_base from dual;
+    insert into base values (my_id_base,my_edad);
+  end;
+/
+
+--se crea disparador after para la insercion en la tabla menores o mayores  
+
+create or replace trigger disp_edad after insert on base
+  for each row
+  begin
+    if :new.edad < 18 then
+      insert into menores values(:new.id_base,:new.edad);
+    else
+      insert into mayores values(:new.id_base,:new.edad);
+    end if;
+  end;
+/
+ 
+declare
+valor integer;
+begin
+  guardar_base(valor,13);
+  guardar_base(valor,45);
+  guardar_base(valor,17);
+  guardar_base(valor,19);
+  guardar_base(valor,90);
+  guardar_base(valor,20);
+  guardar_base(valor,5);
+end;
+/
+
+select * from base;
+select * from menores;
+select * from mayores;

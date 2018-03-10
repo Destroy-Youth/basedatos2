@@ -1,0 +1,95 @@
+ create table usuarios_xxx(
+  id_xxx integer primary key,
+  nombre varchar2(80),
+  edad integer);
+  
+
+--Generar un disparador que impida registrar menores de 18 años
+create or replace trigger disp_xxx before insert on usuarios_xxx
+  for each row
+  begin
+    --inicia lógica
+    if :new.edad < 18 then
+    --raise_application_error excepcion en tiempo de ejecucion
+    -- -20001 código de error, disparadores tipo ddl administrativos construidos en Oracle, excepcion general
+    --
+      raise_application_error(-20001,'Lo siento, pero eres pequeño');
+    end if;
+  end;
+/
+
+
+--Prueba
+    --insercion mayor dde edad
+    insert into usuarios_xxx values (1,'Ivan',19);
+    select * from usuarios_xxx;
+    
+    --insercion menor
+    insert into usuarios_xxx values (2,'Orace',17);
+    SELECT * FROM usuarios_xxx;
+    
+--Validación con variables de sistema de Oracle
+declare
+valor char(60);
+begin
+  valor:=sysdate;
+  dbms_output.put_line('La fecha es ' || + valor);
+  valor:=to_char(sysdate,'DDD');
+  dbms_output.put_line('La fecha es ' || + valor);
+  valor:=to_char(sysdate,'MM');
+  dbms_output.put_line('La fecha es ' || + valor);
+  valor:=to_char(sysdate,'mi');
+  dbms_output.put_line('La fecha es ' || + valor);
+  valor:=to_char(sysdate,'DAY');
+  dbms_output.put_line('La fecha es ' || + valor);
+end;
+/
+
+set serveroutput on;
+
+--Ejercicio
+create table tablita(
+  id_t integer primary key,
+  nombre varchar2(60));
+  
+--Disparador qie impida que se guarde un reg el dia miercoles
+create or replace trigger disp_tablita before insert on tablita
+  for each row
+  declare
+    dia char(40);
+  begin
+  dia:=to_char(sysdate,'DAY');
+  if dia='MIÉRCOLES0' then
+    raise_application_error(-20001,'Hoy es Miércoles, no se puede.');
+  end if;
+end;
+/
+
+insert into tablita values (1,'sadsadf');
+SELECT * FROM TABLITA;
+
+                                    --Triggers de tipo after (caso de automatización)
+--Generar las siguientes 3 tablas
+create table base(
+  id_base integer primary key,
+  edad integer);
+  
+create table mayores(
+  id_mayores integer primary key,
+  edad integer);
+  
+create table menores(
+  id_menores integer primary key,
+  edad integer);
+  
+/*
+  lógica del disparador
+  -Todos los registros insertados se guardarán en la tabla base
+  -menores de edad deben guardarse en mennores
+  -mayores de edad deben guardarse en mayoers
+  
+  Nota: La única tabla que tiene permitido hacer expliciamente el insert es la tabla base
+
+*/
+ 
+  
