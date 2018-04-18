@@ -8,6 +8,21 @@
 
 */
 
+                                    --Triggers de tipo after (caso de automatización)
+--Generar las siguientes 3 tablas
+create table base(
+  id_base integer primary key,
+  edad integer);
+  
+create table mayores(
+  id_mayores integer primary key,
+  edad integer);
+  
+create table menores(
+  id_menores integer primary key,
+  edad integer);
+  
+  
 --Primero se necesita automatizar el id con una secuencia y un procedimiento almacenado
 create sequence sec_idbase
   start with 1

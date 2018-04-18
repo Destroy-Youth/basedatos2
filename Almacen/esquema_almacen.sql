@@ -152,3 +152,15 @@ begin
   guardar_ventas(venta,'East',8800.0,19565,3593);
 end;
 /
+
+--cursor de referencia
+--usado para comunicación entre sistemas
+create or replace procedure obtener_almacen(
+  cur_almacen out sys_refcursor)
+  as
+  begin
+    open cur_almacen for select * from almacen;
+  end;
+  /
+
+select * from almacen;

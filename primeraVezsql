@@ -1,0 +1,13 @@
+--Vamos a crear una tabla de prueba
+
+create table hola(
+id integer primary key,
+nombre varchar2(40),
+edad integer);
+
+insert into hola values(1,'Ivan',21);
+select * from hola;
+
+insert into hola(id) values(2);
+insert into hola(id,nombre) values(3,'fakin');
+                  

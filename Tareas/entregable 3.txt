@@ -1,0 +1,6 @@
+En PL SQL de Oracle se recomienda   ocultar las sentencias  INSERT, UPDATE y DELETE  por medio de procedimientos almacenados con la finalidad de seguir una arquitectura datacéntrica.
+
+Las arquitecturas datacéntricas, como su nombre lo indica, concentran la lógica de la aplicación en el servidor de base de Datos y no en un lenguaje del back-End, como JAVA, C#, o PHP.
+
+ Para cada una de tus tablas genera un procedimiento almacenado para guardar un registro de cada una de ellas.
+

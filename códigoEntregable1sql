@@ -1,0 +1,46 @@
+  /*
+  drop table almacen;
+  drop table cliente;
+  drop table vendedor;
+  drop table ventas;
+  */
+
+create table almacen(
+  num_almacen integer,
+  ubicacion_almacen varchar(30),
+  constraint pk_num_almacen primary key (num_almacen)
+  );
+
+create table cliente(
+  num_cliente integer,
+  nombre_cliente varchar2(50),
+  num_almacen integer,
+  constraint pk_num_cliente primary key (num_cliente)
+  );
+ 
+create table vendedor(
+  num_vendedor integer,
+  nombre_vendedor varchar2(50),
+  constraint pk_num_vendedor primary key (num_vendedor)
+  );
+
+create table ventas(
+  id_ventas integer,
+  area_ventas varchar2(50),
+  monto_ventas float,
+  num_cliente integer,
+  num_vendedor integer,
+  constraint pk_id_ventas primary key (id_ventas)
+  );
+  
+alter table cliente 
+  add constraint fk_clinte_almacen foreign key (num_almacen)
+  references almacen (num_almacen);
+  
+alter table ventas
+  add constraint fk_ventas_cliente foreign key (num_cliente)
+  references cliente (num_cliente);
+  
+alter table ventas
+  add constraint fk_ventas_vendedor foreign key (num_vendedor)
+  references vendedor (num_vendedor);  

@@ -1,0 +1,11 @@
+declare
+  cursor cur_calif is select * from calificaciones; --Siempre sentencia sql
+    begin
+      --Empieza la lógica del cursor
+      for rec in cur_calif loop --rec: variable que almacena la tupla
+      dbms_output.put_line('ejemplo de cursor explicito    ' || rec.valor || '   Materia: ' || rec.materia);
+    end loop;
+  end;
+/
+
+set serveroutput on;

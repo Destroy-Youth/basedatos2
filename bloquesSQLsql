@@ -1,0 +1,73 @@
+--Bloque PLSQL
+--declare bloque1
+/*
+Activación de salida como servidor externo
+
+
+set serveroutput on;
+
+*/
+--Bloque 1
+  begin
+    DBMS_OUTPUT.PUT_LINE('Mi primer PL-SQL'); --DataBaseManagementSystem_Salida.LineaImpresa('Frase');
+  END;
+  /  --Aquí tiene que estar el cursor antes de compilar
+  
+--Blñoque 2
+declare
+  nombre varchar2(40);
+  edad integer;
+  dias integer;
+  
+  begin
+    nombre:='Satán'; --Asignación :=
+    edad:=21;
+    dias:=edad*365;
+    dbms_output.put_line('Días vividos...' || dias);
+  End;
+/
+
+--Bloque 3
+declare
+  nombre varchar2(40);
+  edad integer;
+  dias integer;
+ begin
+    nombre:='Satán'; --Asignación :=
+    edad:=21;
+    
+    for i in 1..10 loop
+      dbms_output.put_line('Mi nombre es...' || nombre || i);
+    end loop;
+  end;
+/  
+
+/*
+1.- Generar la sig tabla:
+    Pruebita1
+-------------------
+id      : integer PK
+nombre  : varchar2(40)
+-------------------
+
+2.- Generar un bloque PL-SQL que genere 1000 registros desde el 1 hasta el 1000
+con el mismo nombre, isn imprimirlo y verificar con un select los registros
+*/
+
+create table pruebita1(
+id integer primary key,
+nombre varchar2(40)
+);
+
+declare
+  nombre varchar2(40);
+
+begin
+  nombre:='Hitler did nothing wrong';
+  for i in 1..1000 loop
+    insert into pruebita1 values(i,nombre);
+  end loop;
+End;
+/
+
+select * from pruebita1;

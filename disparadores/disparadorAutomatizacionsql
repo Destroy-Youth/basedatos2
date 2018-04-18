@@ -1,0 +1,87 @@
+--Ejercicio blackboard
+
+--Declaración de tablas
+create table comprador(
+  id_comprador integer primary key,
+  nombre varchar2(40),
+  monto float);
+  
+create table respaldo_comprador(
+  id_comprador integer primary key,
+  nombre varchar2(40),
+  monto float);
+  
+--creacion de secuencia para el id
+create sequence seq_id
+  start with 1
+  increment by 1
+  nomaxvalue;
+
+--Creacion de procedimiento almacenado
+create or replace procedure respaldo(
+  my_id out integer,
+  my_nombre in varchar2,
+  my_monto in float)
+  is
+  PRAGMA AUTONOMOUS_TRANSACTION;
+  begin
+    select seq_id.nextval into my_id from dual;
+    insert into comprador values(my_id,my_nombre,my_monto);
+  commit;
+  end;
+/
+
+
+declare
+  valor integer;
+  BEGIN
+    respaldo(valor,'Luis',302);
+  end;
+/
+
+    select * from comprador;
+    select * from respaldo_comprador;
+    delete from respaldo_comprador;
+    delete from comprador;
+
+--Disparador mi intento
+create or replace trigger disp_respaldo before insert on comprador
+  for each row
+  declare 
+  cuenta integer; 
+    begin
+    select count(id_comprador) into cuenta from comprador;   
+    insert into respaldo_comprador values (:new.id_comprador,:new.nombre,:new.monto);
+    if cuenta >= 3 then
+      delete from comprador;
+      end if;
+    end;
+  /
+  
+
+  create or replace trigger disp_respaldo before insert on comprador 
+  for each row
+  declare 
+  cuenta integer;
+  cursor cur_comprador is select * from comprador; 
+    begin
+    select count(*) into cuenta from comprador;
+    if cuenta >= 3 then
+      for rec in cur_comprador loop
+        insert into respaldo_comprador values (rec.id_comprador,rec.nombre,rec.monto);
+      end loop;
+      delete from comprador;
+      end if;
+    end;
+  /
+  
+  
+  declare
+  valor integer;
+  BEGIN
+    respaldo(valor,'Luis',302);
+  end;
+/
+
+    select * from comprador;
+    select * from respaldo_comprador;
